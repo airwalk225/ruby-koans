@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 class AboutSymbols < Neo::Koan
   def test_symbols_are_symbols
     symbol = :ruby
-    assert_equal __, symbol.is_a?(Symbol)
+    assert_equal true, symbol.is_a?(Symbol)
   end
 
   def test_symbols_can_be_compared
@@ -11,46 +11,47 @@ class AboutSymbols < Neo::Koan
     symbol2 = :a_symbol
     symbol3 = :something_else
 
-    assert_equal __, symbol1 == symbol2
-    assert_equal __, symbol1 == symbol3
+    assert_equal true, symbol1 == symbol2
+    assert_equal false, symbol1 == symbol3
   end
 
   def test_identical_symbols_are_a_single_internal_object
     symbol1 = :a_symbol
     symbol2 = :a_symbol
 
-    assert_equal __, symbol1           == symbol2
-    assert_equal __, symbol1.object_id == symbol2.object_id
+    assert_equal true, symbol1           == symbol2
+    assert_equal true, symbol1.object_id == symbol2.object_id
   end
 
   def test_method_names_become_symbols
     symbols_as_strings = Symbol.all_symbols.map { |x| x.to_s }
-    assert_equal __, symbols_as_strings.include?("test_method_names_become_symbols")
+    assert_equal true, symbols_as_strings.include?("test_method_names_become_symbols")
   end
 
   # THINK ABOUT IT:
   #
   # Why do we convert the list of symbols to strings and then compare
   # against the string value rather than against symbols?
+  # If we compared against the symbol rather than the string then we would invoke the symbol and not be able to do a comparison
 
   in_ruby_version("mri") do
     RubyConstant = "What is the sound of one hand clapping?"
     def test_constants_become_symbols
       all_symbols_as_strings = Symbol.all_symbols.map { |x| x.to_s }
 
-      assert_equal __, all_symbols_as_strings.include?(__)
+      assert_equal false, all_symbols_as_strings.include?(RubyConstant)
     end
   end
 
   def test_symbols_can_be_made_from_strings
     string = "catsAndDogs"
-    assert_equal __, string.to_sym
+    assert_equal :catsAndDogs, string.to_sym
   end
 
   def test_symbols_with_spaces_can_be_built
     symbol = :"cats and dogs"
 
-    assert_equal __.to_sym, symbol
+    assert_equal symbol.to_sym, symbol
   end
 
   def test_symbols_with_interpolation_can_be_built
