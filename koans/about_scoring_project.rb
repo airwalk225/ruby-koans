@@ -30,7 +30,42 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 # Your goal is to write the score method.
 
 def score(dice)
-  # You need to write this method
+  # Set the score to zero by default
+  score = 0;
+
+  # Figure out what each number is worth
+  numberScore = {1 => 100, 2 => 0, 3 => 0, 4 => 0, 5 => 50}
+
+  # Set the frequency
+  numbers = {1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0}
+
+  # Loop through each of the die and add their frequency
+  dice.each do |n|
+    numbers[n] += 1
+  end
+
+  # Loop through the number
+  numbers.each() do |number, count|
+    # If this number has three or more
+    if count >= 3
+      # And is number one
+      if number == 1
+        # Then add a 1000
+        score += 1000
+      else
+        # else add the number times 100
+        score += 100 * number
+      end
+
+      # Remove 3 from this number count
+      count -= 3
+    end
+
+    # Add the residual score if the numbers left are 1s or 5s
+    score += (count * numberScore[number]) if (number == 1 || number == 5)
+  end
+
+  score
 end
 
 class AboutScoringProject < Neo::Koan
